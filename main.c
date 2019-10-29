@@ -12,7 +12,7 @@ bool prueba(int x){
 }
 
 void imprimirMatroid(Matroid matroid){
-    printf("entro en imprimir");
+    printf("entro en imprimir\n");
     for(int i = 0; i<(sizeof (matroid.I)/sizeof (matroid.I[0])); i++){
         printf("%d\n", matroid.I[i]);
     }
@@ -37,16 +37,12 @@ Matroid evaluarMatroid(Matroid matroid){
 }
 
 
-void evaluarMatroids(Matroid matroids[]){
-//    #pragma omp parallel
-//    #pragma omp for
+void evaluarMatroids(Matroid matroids[], int pTamanio){
+    #pragma omp parallel
+    #pragma omp for
 //    printf("Va a evaluar los matroids\n");
-    printf("tamaño del arreglo de matroids\n");
-    printf("%d\n", (sizeof (matroids)/sizeof (matroids[0])));
-    printf("%d\n", (sizeof (matroids)));
-    printf("%d\n", (sizeof (matroids[0])));
 
-    for(int i = 0; i<(sizeof (matroids)/sizeof (matroids[0])); i++){
+    for(int i = 0; i<pTamanio; i++){
         matroids[i] = evaluarMatroid(matroids[i]);
         imprimirMatroid(matroids[i]);
     }
@@ -61,13 +57,13 @@ void evaluarMatroids(Matroid matroids[]){
 int main()
 {
 
-    Matroid matroid = {.S = {1}, .function = prueba};
+    Matroid matroid = {.S = {1,2,-1,3,4}, .function = prueba};
+    Matroid matroid2 = { .S = {5,-2,1,-3,7}, .function = prueba };
 
-    Matroid matroids[] = {matroid};
-    printf("%d\n", sizeof (matroid));
-    printf("%d\n", sizeof (matroids));
+    Matroid matroids[] = {matroid, matroid2};
+    int tamanioArreglo = sizeof (matroids)/sizeof (matroids[0]);
 
-    evaluarMatroids(matroids);
+    evaluarMatroids(matroids, tamanioArreglo);
 //    matroid = evaluarMatroid(matroid);
 //    printf("Va a imprimir\n");
 //    imprimirMatroid(matroid);

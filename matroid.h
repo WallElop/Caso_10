@@ -5,8 +5,8 @@
 
 
 typedef struct Matroid{
-    int S[1];
-    int I[1];
+    int S[5];
+    int I[5];
     bool (*function)();
 
 }Matroid;
