@@ -1,0 +1,10 @@
+#ifndef MATROIDDATE_H
+#define MATROIDDATE_H
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+struct MatroidDate{
+    time_t Ms[15];
+    time_t Mi[15];
+};
+#endif // MATROIDDATE_H
