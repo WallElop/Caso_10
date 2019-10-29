@@ -24,7 +24,7 @@
     { \
         int (*is_empty)(const struct _list_##type*); \
         size_t (*size)(const struct _list_##type*); \
-        const type (*get)(const struct _list_##type*, int pos); \
+        const type (*get)(const struct _list_##type*, size_t pos); \
         void (*insert)(struct _list_##type*, type); \
     } _list_functions_##type; \
     \
@@ -45,7 +45,7 @@
     List_##type* new_list_##type(); \
     bool list_is_empty_##type(const List_##type* list); \
     size_t list_size_##type(const List_##type* list); \
-    const type list_get_##type(const List_##type* list, int pos); \
+    const type list_get_##type(const List_##type* list, size_t pos); \
     void list_insert_##type(List_##type* list, type elem); \
     \
     bool list_is_empty_##type(const List_##type* list) \
@@ -58,17 +58,17 @@
         return list->_size; \
     } \
     \
-    const type list_get_##type(const List_##type* list, int pos) \
+    const type list_get_##type(const List_##type* list, size_t pos) \
     { \
-        int cont = 0; \
+        size_t cont = 0; \
         list_elem_##type* auxiliarNode = list->_first; \
-        int lenght = (int)((ssize_t)list->_size);\
-        if(pos < lenght){\
-            while(cont<=lenght){\
+        if(pos <= list->_size){\
+            while(cont<=list->_size){\
                 if(cont == pos){\
-                    return auxiliarNode->data;\
+                    return auxiliarNode->_data;\
                 }\
-                auxiliarNode->_next;\
+                auxiliarNode = auxiliarNode->_next;\
+                cont++;\
             }\
             return -1;\
         }\
@@ -77,8 +77,8 @@
     \
     void list_insert_##type(List_##type* list, type elem) \
     { \
-        List_##type* new_node = (List_##type*) malloc(sizeof(List_##type)); \
-        new_node->data = elem;\
+        list_elem_##type* new_node = (list_elem_##type*)malloc(sizeof(list_elem_##type)); \
+        new_node->_data = elem;\
         new_node->_next = NULL;\
         if(list->_size != 0){\
             list_elem_##type* auxiliarNode = list->_first; \
@@ -86,7 +86,12 @@
                 auxiliarNode = auxiliarNode->_next;\
             }\
             auxiliarNode->_next = new_node;\
+            list->_size +=1;\
         }\
+        else{\
+            list->_first = new_node;\
+            list->_size +=1;\
+        } \
     } \
     \
     _list_functions_##type _list_funcs_##type = { \
@@ -128,6 +133,7 @@ define_list(int)
 void prueba(){
     List(int) *a = new_list(int);
     insert(a,12);
+    insert(a,16);
     int value = get(a,0);
     printf("%i",value);
 }
