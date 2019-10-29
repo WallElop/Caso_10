@@ -5,8 +5,6 @@ CppApplication {
     files: [
         "library.h",
         "main.c",
-        "matroiddate.h",
-        "matroidfloat.h",
         "matroidint.h",
         "matroidstring.h",
     ]
