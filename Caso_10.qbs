@@ -4,9 +4,9 @@ CppApplication {
     consoleApplication: true
     files: [
         "library.h",
+        "list.h",
         "main.c",
-        "matroidint.h",
-        "matroidstring.h",
+        "matroid.h",
     ]
 
     Group {     // Properties for the produced executable

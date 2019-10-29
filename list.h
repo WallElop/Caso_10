@@ -4,17 +4,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define DEFINE_MATROID(CONCRETE_TYPE) \
-    struct Matroid ##CONCRETE_TYPE \
-    { \
-        CONCRETE_TYPE data; \
-        struct Matroid ##CONCRETE_TYPE *next; \
-    };
-
-#define DECLARE_MATROID(CONCRETE_TYPE,VARIABLE_NAME) \
-  struct Matroid ## CONCRETE_TYPE VARIABLE_NAME;
-
-
 
 #define define_list(type) \
 \
@@ -127,15 +116,5 @@
 
 #define insert(collection, elem) \
     collection->_functions->insert(collection, elem)
-
-
-define_list(int)
-void prueba(){
-    List(int) *a = new_list(int);
-    insert(a,12);
-    insert(a,16);
-    int value = get(a,0);
-    printf("%i",value);
-}
 
 #endif // MATROIDINT_H
