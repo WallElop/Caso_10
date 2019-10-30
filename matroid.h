@@ -6,6 +6,7 @@
 
 typedef void* dataType;
 define_list(dataType)
+
 typedef struct Matroid{
     List(dataType)*S;
     List(dataType)*I;

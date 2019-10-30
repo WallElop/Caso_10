@@ -32,12 +32,9 @@ Matroid evaluateMatroid(Matroid matroid){
     printf("Entro en evaluar matroid!\n");
     #pragma omp parallel
     #pragma omp for
-
-    printf("%d\n",matroid.S->_size);
     for(int posInS=0; posInS<matroid.S->_size; posInS++){
         printf("%d\n", get(matroid.S,posInS));
         if(matroid.function(get(matroid.S,posInS))){
-            printf("Es mayor a 0\n");
             insert(matroid.I,get(matroid.S,posInS));
         }
     }
@@ -45,11 +42,10 @@ Matroid evaluateMatroid(Matroid matroid){
 }
 
 
-void evaluarMatroids(Matroid matroids[], int pSize){
+
+void evaluateMatroids(Matroid matroids[], int pSize){
     #pragma omp parallel
     #pragma omp for
-//    printf("Va a evaluar los matroids\n");
-
     for(int posInMatroids = 0; posInMatroids<pSize; posInMatroids++){
         matroids[posInMatroids] = evaluateMatroid(matroids[posInMatroids]);
         showMatroid(matroids[posInMatroids]);
@@ -58,8 +54,47 @@ void evaluarMatroids(Matroid matroids[], int pSize){
 
 }
 
+bool search(Matroid pMatroid, void* pTarget){
+    #pragma omp parallel
+    #pragma omp for
+    for(int posInI = 0; posInI<pMatroid.S->_size ; posInI++){
+        if(get(pMatroid.I, posInI) == pTarget){
+            return true;
+        }
+    }
+    return false;
+}
+
+void intersection(Matroid *pConjunto, Matroid pMatroid2){
+    #pragma omp parallel
+    #pragma omp for
+    for (int posInIMatroid1 = 0; posInIMatroid1<pConjunto->I->_size; posInIMatroid1++ ) {
+        if(!(search(pMatroid2, get(pConjunto->I,posInIMatroid1)))){
+            insert(pConjunto->I, get(pConjunto->I,posInIMatroid1));
+        }
+    }
+}
+
+void B(Matroid matroids[], int pSize){
+    evaluateMatroids(matroids, pSize);
+    Matroid *conjunto;
+    conjunto->I = matroids[0].I;
+    #pragma omp parallel
+    #pragma omp for
+    for (int posInMatroids = 1; posInMatroids<pSize; posInMatroids++){
+        intersection(conjunto, matroids[posInMatroids]);
+    }
+
+    Matroid matroid;
+    matroid.I = conjunto->I;
+    showMatroid(matroid);
+
+}
+
 
 int main(){
+
+    printf("%f\n", 3.23456);
 
     List(int) *l1 = new_list(int);
     insert(l1,3);
@@ -81,9 +116,10 @@ int main(){
     Matroid matroids[] = {matroid, matroid2};
     int tamanioArreglo = sizeof (matroids)/sizeof (matroids[0]);
 
-    evaluarMatroids(matroids, tamanioArreglo);
+    evaluateMatroids(matroids, tamanioArreglo);
 
     printf("Hello World!\n");
+
 
     return 0;
 }
