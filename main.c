@@ -55,38 +55,77 @@ void evaluateMatroids(Matroid matroids[], int pSize){
 }
 
 bool search(Matroid pMatroid, void* pTarget){
+    printf("Entro en search\n");
     #pragma omp parallel
     #pragma omp for
-    for(int posInI = 0; posInI<pMatroid.S->_size ; posInI++){
+    printf("Tamanio de la lista: ");
+    printf("%d\n", pMatroid.I->_size);
+    for(int posInI = 0; posInI<pMatroid.I->_size ; posInI++){
+        printf("%d\n", get(pMatroid.I, posInI));
+        printf("%d\n", pTarget);
         if(get(pMatroid.I, posInI) == pTarget){
+            printf("Verdadero\n");
             return true;
         }
     }
+    printf("Falso\n");
     return false;
 }
 
+void deleteRepeateds(Matroid *pConjunto){
+    printf("Entro en eliminar repetidos");
+    for (int posInConjunto = 0; posInConjunto<(pConjunto->I->_size-1); posInConjunto++) {
+        printf("entro en el for\n");
+        int posInConjunto2 = posInConjunto+1;
+        while(posInConjunto2<pConjunto->I->_size){
+            printf("Entro en el while\n");
+            printf("%d\n", pConjunto->I->_size);
+            printf("%d", get(pConjunto->I, posInConjunto));
+            printf(" == ");
+            printf("%d\n", get(pConjunto->I, posInConjunto2));
+            if(get(pConjunto->I, posInConjunto) == get(pConjunto->I, posInConjunto2)){
+                delete(pConjunto->I, posInConjunto2);
+            }else {
+                posInConjunto2++;
+            }
+        }
+    }
+}
+
 void intersection(Matroid *pConjunto, Matroid pMatroid2){
+    printf("Entro en interssection\n");
     #pragma omp parallel
     #pragma omp for
     for (int posInIMatroid1 = 0; posInIMatroid1<pConjunto->I->_size; posInIMatroid1++ ) {
+        printf("%d\n", get(pConjunto->I,posInIMatroid1));
         if(!(search(pMatroid2, get(pConjunto->I,posInIMatroid1)))){
-            insert(pConjunto->I, get(pConjunto->I,posInIMatroid1));
+            printf("va a borrar jaja XD\n");
+            delete(pConjunto->I, posInIMatroid1);
         }
+        printf("no se borro yeeei\n");
     }
 }
 
 void B(Matroid matroids[], int pSize){
+    printf("entro en B\n");
     evaluateMatroids(matroids, pSize);
     Matroid *conjunto;
     conjunto->I = matroids[0].I;
+    deleteRepeateds(conjunto);
+    printf("resultado de eliminar el repetido\n");
+    Matroid matroid;
+    matroid.I = conjunto->I;
+    showMatroid(matroid);
+
     #pragma omp parallel
     #pragma omp for
     for (int posInMatroids = 1; posInMatroids<pSize; posInMatroids++){
         intersection(conjunto, matroids[posInMatroids]);
     }
 
-    Matroid matroid;
+//    Matroid matroid;
     matroid.I = conjunto->I;
+    printf("resultado de la intersection\n");
     showMatroid(matroid);
 
 }
@@ -98,10 +137,10 @@ int main(){
 
     List(int) *l1 = new_list(int);
     insert(l1,3);
-    insert(l1,-3);
+    insert(l1,3);
     insert(l1,1);
-    insert(l1,-2);
-    insert(l1,-9);
+    insert(l1,2);
+    insert(l1,9);
 
     List(bool) *l2 = new_list(bool);
     insert(l2,true);
@@ -110,13 +149,26 @@ int main(){
     insert(l2,false);
     insert(l2,true);
 
+    List(int) *l3 = new_list(int);
+    insert(l3,3);
+    insert(l3,3);
+    insert(l3,5);
+    insert(l3,2);
+    insert(l3,9);
+
     Matroid matroid = {.S = l1, .I = new_list(int) , .function = functionA };
     Matroid matroid2 = { .S = l2,.I = new_list(bool), .function = functionB };
+    Matroid matroid3 = {.S = l3, .I = new_list(int), .function = functionA};
 
     Matroid matroids[] = {matroid, matroid2};
+    Matroid matroidsInter[] = {matroid, matroid3};
+
+
     int tamanioArreglo = sizeof (matroids)/sizeof (matroids[0]);
 
-    evaluateMatroids(matroids, tamanioArreglo);
+    //evaluateMatroids(matroids, tamanioArreglo);
+
+    B(matroidsInter, 2);
 
     printf("Hello World!\n");
 

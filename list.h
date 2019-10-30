@@ -94,6 +94,7 @@
                     list_elem_##type* delete_node = list->_first; \
                     list->_first = list->_first->_next; \
                     free(delete_node); \
+                    list->_size -=1;\
                 } \
                 else{ \
                     int count = 1;\
@@ -105,6 +106,7 @@
                     list_elem_##type* delete_node = auxiliar_node->_next; \
                     auxiliar_node->_next = auxiliar_node->_next->_next; \
                     free(delete_node); \
+                    list->_size -=1;\
                 } \
             } \
         } \
