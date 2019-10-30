@@ -15,6 +15,7 @@
         size_t (*size)(const struct _list_##type*); \
         const type (*get)(const struct _list_##type*, size_t pos); \
         void (*insert)(struct _list_##type*, type); \
+        void (*delete)(struct _list_##type*, int pos); \
     } _list_functions_##type; \
     \
     typedef struct _list_elem_##type \
@@ -36,6 +37,7 @@
     size_t list_size_##type(const List_##type* list); \
     const type list_get_##type(const List_##type* list, size_t pos); \
     void list_insert_##type(List_##type* list, type elem); \
+    void list_delete_##type(List_##type* list, int pos); \
     \
     bool list_is_empty_##type(const List_##type* list) \
     { \
@@ -83,11 +85,36 @@
         } \
     } \
     \
+    void list_delete_##type(List_##type* list, int pos) \
+    { \
+        if(list->_size != 0) \
+        { \
+            if(pos <= list->_size && pos >= 0){ \
+                if(pos == 0){ \
+                    list_elem_##type* delete_node = list->_first; \
+                    list->_first = list->_first->_next; \
+                    free(delete_node); \
+                } \
+                else{ \
+                    int count = 1;\
+                    list_elem_##type* auxiliar_node = list->_first; \
+                    while(count > pos){ \
+                        auxiliar_node = auxiliar_node->_next; \
+                        count++; \
+                    } \
+                    list_elem_##type* delete_node = auxiliar_node->_next; \
+                    auxiliar_node->_next = auxiliar_node->_next->_next; \
+                    free(delete_node); \
+                } \
+            } \
+        } \
+    } \
     _list_functions_##type _list_funcs_##type = { \
         &list_is_empty_##type, \
         &list_size_##type, \
         &list_get_##type, \
         &list_insert_##type, \
+        &list_delete_##type, \
     }; \
     \
     List_##type* new_list_##type() \
@@ -116,5 +143,8 @@
 
 #define insert(collection, elem) \
     collection->_functions->insert(collection, elem)
+
+#define delete(collection, pos) \
+    collection->_functions->delete(collection, pos)
 
 #endif // MATROIDINT_H
