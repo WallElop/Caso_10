@@ -24,7 +24,14 @@ bool functionB(bool x){
 void showMatroid(Matroid matroid){
     printf("entro en imprimir\n");
     for(int posInI = 0; posInI<matroid.I->_size; posInI++){
-        printf("%d\n", get(matroid.I,posInI));
+        void *data = get(matroid.I,posInI);
+        if(isalpha(data) != 0){
+           printf("%c\n", get(matroid.I,posInI));
+        }else if (data != (int)data) {
+            printf("%f\n", data);
+        }else {
+            printf("%d\n", data);
+        }
     }
 }
 
@@ -133,7 +140,7 @@ void B(Matroid matroids[], int pSize){
 
 int main(){
 
-    printf("%f\n", 3.23456);
+//    printf("%f\n", 3.23456);
 
     List(int) *l1 = new_list(int);
     insert(l1,3);
@@ -166,9 +173,23 @@ int main(){
 
     int tamanioArreglo = sizeof (matroids)/sizeof (matroids[0]);
 
-    //evaluateMatroids(matroids, tamanioArreglo);
+    evaluateMatroids(matroids, tamanioArreglo);
+//    float variable = 12.009;
 
-    B(matroidsInter, 2);
+//    printf("%f\n",variable);
+//    printf("%d\n", isalpha(variable));
+
+//    printf("%f\n", variable);
+//    printf("%d",sizeof (variable));
+
+//    B(matroidsInter, 2);
+
+    char variable[] = "hola";
+    char hola = 'h';
+    bool hola2 = true;
+//    printf("%c",variable);
+    printf("%d\n", isalpha(variable));
+    printf("%b",hola2);
 
     printf("Hello World!\n");
 
