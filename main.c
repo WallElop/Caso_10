@@ -4,6 +4,7 @@
 
 define_list(int)
 define_list(bool)
+define_list(char)
 
 bool functionA(int x){
     if(x>0){
@@ -15,6 +16,14 @@ bool functionA(int x){
 
 bool functionB(bool x){
     if(x == false){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool functionC(char x){
+    if(x != 'a' || x != 'c'){
         return true;
     }else{
         return false;
@@ -156,16 +165,16 @@ int main(){
     insert(l2,false);
     insert(l2,true);
 
-    List(int) *l3 = new_list(int);
-    insert(l3,3);
-    insert(l3,3);
-    insert(l3,5);
-    insert(l3,2);
-    insert(l3,9);
+    List(char) *l3 = new_list(char);
+    insert(l3,'a');
+    insert(l3,'b');
+    insert(l3,'c');
+    insert(l3,'d');
+    insert(l3,'e');
 
     Matroid matroid = {.S = l1, .I = new_list(int) , .function = functionA };
     Matroid matroid2 = { .S = l2,.I = new_list(bool), .function = functionB };
-    Matroid matroid3 = {.S = l3, .I = new_list(int), .function = functionA};
+    Matroid matroid3 = {.S = l3, .I = new_list(char), .function = functionC};
 
     Matroid matroids[] = {matroid, matroid2};
     Matroid matroidsInter[] = {matroid, matroid3};
@@ -174,15 +183,7 @@ int main(){
     int tamanioArreglo = sizeof (matroids)/sizeof (matroids[0]);
 
     evaluateMatroids(matroids, tamanioArreglo);
-//    float variable = 12.009;
 
-//    printf("%f\n",variable);
-//    printf("%d\n", isalpha(variable));
-
-//    printf("%f\n", variable);
-//    printf("%d",sizeof (variable));
-
-//    B(matroidsInter, 2);
 
     char variable[] = "hola";
     char hola = 'h';
