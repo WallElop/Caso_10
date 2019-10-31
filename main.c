@@ -2,9 +2,10 @@
 #include "matroid.h"
 #include <stdbool.h>
 
+typedef char* string;
 define_list(int)
 define_list(bool)
-define_list(char)
+define_list(string)
 
 bool functionA(int x){
     if(x>0){
@@ -22,8 +23,8 @@ bool functionB(bool x){
     }
 }
 
-bool functionC(char x){
-    if(x != 'a' || x != 'c'){
+bool functionC(string x){
+    if(x != "Josue"){
         return true;
     }else{
         return false;
@@ -158,16 +159,16 @@ int main(){
     insert(l2,false);
     insert(l2,true);
 
-    List(char) *l3 = new_list(char);
-    insert(l3,'a');
-    insert(l3,'b');
-    insert(l3,'c');
-    insert(l3,'d');
-    insert(l3,'e');
+    List(string) *l3 = new_list(string);
+    insert(l3,"Walter");
+    insert(l3,"Eduard");
+    insert(l3,"Josue");
+    insert(l3,"Lopez");
+    insert(l3,"Molinares");
 
     Matroid matroid = {.S = l1, .I = new_list(int) , .function = functionA };
     Matroid matroid2 = { .S = l2,.I = new_list(bool), .function = functionB };
-    Matroid matroid3 = {.S = l3, .I = new_list(char), .function = functionC};
+    Matroid matroid3 = {.S = l3, .I = new_list(string), .function = functionC};
 
     Matroid matroids[] = {matroid, matroid2};
     Matroid matroidsInter[] = {matroid, matroid3};
