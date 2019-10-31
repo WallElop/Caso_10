@@ -99,12 +99,13 @@
                 else{ \
                     int count = 1;\
                     list_elem_##type* auxiliar_node = list->_first; \
-                    while(count > pos){ \
+                    while(count < pos){ \
                         auxiliar_node = auxiliar_node->_next; \
                         count++; \
                     } \
                     list_elem_##type* delete_node = auxiliar_node->_next; \
-                    auxiliar_node->_next = auxiliar_node->_next->_next; \
+                    auxiliar_node->_next = delete_node->_next; \
+                    delete_node->_next = NULL;\
                     free(delete_node); \
                     list->_size -=1;\
                 } \
